@@ -1,0 +1,221 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>playground-basic</artifactId>
+    <groupId>io.hapifhir.playground</groupId>
+    <version>1.0</version>
+
+    <dependencies>
+        <!-- This dependency includes the core HAPI-FHIR classes -->
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-base</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-structures-r4</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-client</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+
+        <!-- Logging framework -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <packaging>war</packaging>
+
+    <name>HAPI FHIR JPA Server - Starter Project</name>
+
+    <repositories>
+        <repository>
+            <id>oss-snapshots</id>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
+    <build>
+
+        <!-- Tells Maven to name the generated WAR file as hapi-fhir-jpaserver.war -->
+        <finalName>hapi-fhir-jpaserver</finalName>
+
+        <plugins>
+            <!-- The following is not required for the application to build, but allows you to test it by issuing "mvn jetty:run" from the command line. -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty_version}</version>
+                <configuration>
+                    <webApp>
+                        <contextPath>/hapi-fhir-jpaserver</contextPath>
+                        <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
+                    </webApp>
+                </configuration>
+            </plugin>
+
+            <!-- Tell Maven which Java source version you want to use -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <!-- The configuration here tells the WAR plugin to include the FHIR Tester overlay. You can omit it if you are not using that feature. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Build-Time>${maven.build.timestamp}</Build-Time>
+                        </manifestEntries>
+                    </archive>
+                    <overlays>
+                        <overlay>
+                            <groupId>ca.uhn.hapi.fhir</groupId>
+                            <artifactId>hapi-fhir-testpage-overlay</artifactId>
+                        </overlay>
+                    </overlays>
+                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+                </configuration>
+            </plugin>
+
+            <!-- This is to run the integration tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.basepom.maven</groupId>
+                <artifactId>duplicate-finder-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <inherited>true</inherited>
+                    </execution>
+                </executions>
+                <configuration>
+                    <failBuildInCaseOfConflict>true</failBuildInCaseOfConflict>
+                    <checkTestClasspath>false</checkTestClasspath>
+                    <!--
+                    <printEqualFiles>false</printEqualFiles>
+                    <failBuildInCaseOfDifferentContentConflict>true</failBuildInCaseOfDifferentContentConflict>
+                    <failBuildInCaseOfEqualContentConflict>true</failBuildInCaseOfEqualContentConflict>
+                    <failBuildInCaseOfConflict>true</failBuildInCaseOfConflict>
+                    <checkCompileClasspath>true</checkCompileClasspath>
+                    <checkRuntimeClasspath>false</checkRuntimeClasspath>
+                    <skip>false</skip>
+                    <quiet>false</quiet>
+                    <preferLocal>true</preferLocal>
+                    <useResultFile>true</useResultFile>
+                    <resultFileMinClasspathCount>2</resultFileMinClasspathCount>
+                    <resultFile>${project.build.directory}/duplicate-finder-result.xml</resultFile>
+                    -->
+                    <!--
+                    <ignoredDependencies>
+                        <dependency>
+                            <groupId>javax.el</groupId>
+                            <artifactId>javax.el-api</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>javax.mail</groupId>
+                            <artifactId>javax.mail-api</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>javax.activation</groupId>
+                            <artifactId>javax.activation-api</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>com.helger</groupId>
+                            <artifactId>ph-schematron</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>commons-logging</groupId>
+                            <artifactId>commons-logging</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.jscience</groupId>
+                            <artifactId>jscience</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-jcl</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-jcl</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>com.google.code.findbugs</groupId>
+                            <artifactId>annotations</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.apache.derby</groupId>
+                            <artifactId>derbyclient</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.apache.derby</groupId>
+                            <artifactId>derbynet</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.apache.derby</groupId>
+                            <artifactId>derbyclient</artifactId>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.checkerframework</groupId>
+                            <artifactId>checker-compat-qual</artifactId>
+                        </dependency>
+                    </ignoredDependencies>
+                    -->
+                    <ignoredResourcePatterns>
+                        <ignoredResourcePattern>.*\.txt$</ignoredResourcePattern>
+                        <ignoredResourcePattern>.*\.html$</ignoredResourcePattern>
+                    </ignoredResourcePatterns>
+                </configuration>
+            </plugin>
+
+
+        </plugins>
+    </build>
+
+</project>
