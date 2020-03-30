@@ -10,7 +10,7 @@ This project is a skeleton project for using [HAPI FHIR](https://hapifhir.io) to
 
   http://hapi.fhir.org/baseR4/Patient?family=SMITH
   
-* [ ] Fork this project into your own GitHub account
+* [ ] Create your own GitHub project and copy the contents of this repository into your own project (please don't fork this repository)
 
 * [ ] Locate the class `SampleClient` and run it. This class runs the same search shown above.
 
