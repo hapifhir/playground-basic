@@ -38,4 +38,6 @@ This project is a skeleton project for using [HAPI FHIR](https://hapifhir.io) to
 
 * [ ] If there is enough time between runs, you should expect to see loop 2 with a shorter average response time than loop 1 and 3.
 
+* [ ] Please include unit tests for your work
+
 * [ ] Commit your work
