@@ -1,4 +1,4 @@
-# HAPI FHIR Playground: Basic
+# HAPI FHIR Playground: 
 
 This project is a skeleton project for using [HAPI FHIR](https://hapifhir.io) to access a public [FHIR](http://hl7.org/fhir/) server hosted at [http://hapi.fhir.org/baseR4](http://hapi.fhir.org/baseR4).
 
@@ -16,7 +16,7 @@ This project is a skeleton project for using [HAPI FHIR](https://hapifhir.io) to
 
 * [ ] **Please, do not fork this repo.** Create your own private GitHub repository to do your work in.
 
-### Basic Tasks:
+### Task 1:
 
 * [ ] Modify `SampleClient` so that it prints the first and last name, and birth date of each Patient to the screen
 
@@ -24,7 +24,7 @@ This project is a skeleton project for using [HAPI FHIR](https://hapifhir.io) to
 
 * [ ] Commit your work
 
-### Intermediate Tasks:
+### Task 2:
 
 * [ ] Create a text file containing 20 different last names
 
